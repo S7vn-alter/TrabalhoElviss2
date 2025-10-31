@@ -1,0 +1,44 @@
+@model TrabalhoElvis2.Models.Condominio
+
+@{
+    ViewData["Title"] = "Cadastrar Condomínio";
+}
+
+<h2 style="color:#4682b4;">Cadastrar Condomínio</h2>
+<hr />
+
+<form asp-action="Cadastrar" asp-controller="Condominio" method="post" style="max-width:680px;">
+    <input type="hidden" asp-for="AdminUsuarioId" />
+
+    <div class="form-group">
+        <label>Nome do Condomínio</label>
+        <input asp-for="Nome" class="form-control" />
+        <span class="text-danger" asp-validation-for="Nome"></span>
+    </div>
+
+    <div class="form-group mt-3">
+        <label>CNPJ</label>
+        <input asp-for="Cnpj" class="form-control" placeholder="00.000.000/0000-00" />
+        <span class="text-danger" asp-validation-for="Cnpj"></span>
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Endereço</label>
+        <input asp-for="Endereco" class="form-control" />
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Quantidade de Blocos</label>
+        <input asp-for="QuantidadeBlocos" class="form-control" type="number" min="1" />
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Unidades por Bloco</label>
+        <input asp-for="UnidadesPorBloco" class="form-control" type="number" min="1" />
+    </div>
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-success">Salvar</button>
+        <a href="/Usuario/Login" class="btn btn-secondary">Sair</a>
+    </div>
+</form>

@@ -1,0 +1,81 @@
+@model TrabalhoElvis2.Models.Usuario
+
+@{
+    ViewData["Title"] = "Cadastro de Usuário";
+}
+
+<h2 style="text-align:center; color:#4682b4;">Cadastro de Usuário</h2>
+<hr>
+
+<form asp-action="Cadastrar" asp-controller="Usuario" method="post" style="max-width:600px; margin:auto;">
+    <div class="form-group">
+        <label>Tipo de Usuário</label>
+        <select id="tipoUsuario" name="TipoUsuario" class="form-control" required>
+            <option value="">Selecione...</option>
+            <option value="Administrador">Administrador</option>
+            <option value="Síndico">Síndico</option>
+            <option value="Morador">Morador</option>
+        </select>
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" placeholder="seu@email.com" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Senha</label>
+        <input asp-for="Senha" class="form-control" type="password" placeholder="Digite uma senha" />
+        <span asp-validation-for="Senha" class="text-danger"></span>
+    </div>
+
+    <!-- Campos de Administrador -->
+    <div id="camposAdmin" style="display:none;">
+        <h4 class="mt-4 text-primary">Informações do Administrador</h4>
+        <div class="form-group">
+            <label>Nome do Administrador</label>
+            <input asp-for="NomeAdministrador" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Nome do Condomínio</label>
+            <input asp-for="NomeCondominio" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>CNPJ</label>
+            <input asp-for="Cnpj" class="form-control" />
+        </div>
+    </div>
+
+    <!-- Campos de Morador -->
+    <div id="camposMorador" style="display:none;">
+        <h4 class="mt-4 text-primary">Informações do Morador</h4>
+        <div class="form-group">
+            <label>Nome Completo</label>
+            <input asp-for="NomeCompleto" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Apartamento</label>
+            <input asp-for="Apartamento" class="form-control" />
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+        <a href="/Usuario/Login" class="btn btn-secondary" style="margin-left:10px;">Voltar ao Login</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        const tipoSelect = document.getElementById("tipoUsuario");
+        const camposAdmin = document.getElementById("camposAdmin");
+        const camposMorador = document.getElementById("camposMorador");
+
+        tipoSelect.addEventListener("change", () => {
+            const tipo = tipoSelect.value;
+            camposAdmin.style.display = tipo === "Administrador" ? "block" : "none";
+            camposMorador.style.display = tipo === "Morador" ? "block" : "none";
+        });
+    </script>
+}

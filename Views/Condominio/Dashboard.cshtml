@@ -1,0 +1,21 @@
+@model TrabalhoElvis2.Models.Condominio
+
+@{
+    ViewData["Title"] = "Visibilidade do Condomínio";
+}
+
+<h2 style="color:#4682b4;">Visibilidade do Condomínio</h2>
+<hr />
+
+<div style="margin-top:20px;">
+    <p><strong>Nome:</strong> @Model.Nome</p>
+    <p><strong>CNPJ:</strong> @Model.Cnpj</p>
+    <p><strong>Endereço:</strong> @Model.Endereco</p>
+    <p><strong>Blocos:</strong> @Model.QuantidadeBlocos</p>
+    <p><strong>Unidades por Bloco:</strong> @Model.UnidadesPorBloco</p>
+</div>
+
+<div style="margin-top:30px;">
+    <a href="/Condominio/Cadastrar?adminId=@Model.AdminUsuarioId" class="btn btn-primary">Editar Condomínio</a>
+    <a href="/Usuario/Login" class="btn btn-danger">Sair</a>
+</div>

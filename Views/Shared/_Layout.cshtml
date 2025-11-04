@@ -1,49 +1,241 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TrabalhoElvis2</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/TrabalhoElvis2.styles.css" asp-append-version="true" />
+    <title>@ViewData["Title"] - VizinhApp</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .layout-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 250px;
+            background-color: #fff;
+            border-right: 1px solid #dee2e6;
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar .brand {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar .brand h5 {
+            color: #0050d8;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+        .sidebar .brand small {
+            color: #6c757d;
+        }
+
+        .sidebar .nav-link {
+            color: #333;
+            border-radius: 6px;
+            padding: 0.6rem 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #e9f0ff;
+            color: #0050d8;
+        }
+
+        .sidebar .nav-link.active {
+            background-color: #e9f0ff;
+            color: #0050d8;
+            font-weight: 600;
+        }
+
+        .sidebar i {
+            font-size: 1rem;
+            margin-right: 8px;
+        }
+
+        .user-info {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid #dee2e6;
+            text-align: center;
+        }
+
+        .user-info i {
+            font-size: 1.2rem;
+        }
+
+        .user-info small {
+            color: #6c757d;
+        }
+
+        .logout-btn {
+            border: 1px solid #dc3545;
+            color: #dc3545;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
+            padding: 1.5rem 2rem;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 1px solid #dee2e6;
+            padding: 0.8rem 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .topbar h6 {
+            margin: 0;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .topbar i {
+            color: #0050d8;
+        }
+    </style>
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TrabalhoElvis2</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div class="layout-container">
+
+        <!-- Sidebar -->
+        <div class="sidebar shadow-sm">
+            <div class="brand">
+                <h5>VizinApp</h5>
+                <small>Gestão Inteligente</small>
+            </div>
+
+            <ul class="nav flex-column">
+
+                <li class="nav-item mb-1">
+                    <a class="nav-link d-flex align-items-center @(ViewData["Title"] == "Dashboard" ? "active" : "")"
+                       asp-controller="Dashboard" asp-action="Index">
+                        <i class="bi bi-bar-chart"></i> Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item mb-1">
+                    <a class="nav-link d-flex align-items-center @(ViewData["Title"] == "Imóveis" ? "active" : "")"
+                       asp-controller="Imovel" asp-action="Index">
+                        <i class="bi bi-house"></i> Imóveis
+                    </a>
+                </li>
+
+                <li class="nav-item mb-1">
+                    <a class="nav-link d-flex align-items-center @(ViewData["Title"] == "Pessoas" ? "active" : "")"
+                       asp-controller="Pessoa" asp-action="Index">
+                        <i class="bi bi-people"></i> Pessoas
+                    </a>
+                </li>
+
+                <!-- ✅ Novo item do menu: Contratos -->
+                <li class="nav-item mb-1">
+                    <a class="nav-link d-flex align-items-center @(ViewData["Title"] == "Contratos de Aluguel" ? "active" : "")"
+                       asp-controller="Contrato" asp-action="Index">
+                        <i class="bi bi-file-earmark-text"></i> Contratos
+                    </a>
+                </li>
+
+                <li class="nav-item mb-1">
+                    <a class="nav-link d-flex align-items-center" asp-controller="Financeiro" asp-action="Index">
+                        <i class="bi bi-currency-dollar"></i> Financeiro
+                    </a>
+                </li>
+
+                <li class="nav-item mb-1">
+                    <a class="nav-link d-flex align-items-center" asp-controller="Vistoria" asp-action="Index">
+                        <i class="bi bi-clipboard-check"></i> Vistorias
+                    </a>
+                </li>
+
+                <li class="nav-item mb-1">
+                    <a class="nav-link d-flex align-items-center" asp-controller="Manutencao" asp-action="Index">
+                        <i class="bi bi-tools"></i> Manutenções
+                    </a>
+                </li>
+
+                <li class="nav-item mb-1">
+                    <a class="nav-link d-flex align-items-center" asp-controller="Comunicacao" asp-action="Index">
+                        <i class="bi bi-bell"></i> Comunicação
+                    </a>
+                </li>
+
+                <li class="nav-item mb-1">
+                    <a class="nav-link d-flex align-items-center" asp-controller="ControleAcesso" asp-action="Index">
+                        <i class="bi bi-shield-lock"></i> Controle de Acesso
+                    </a>
+                </li>
+
+                <li class="nav-item mb-1">
+                    <a class="nav-link d-flex align-items-center" asp-controller="Relatorios" asp-action="Index">
+                        <i class="bi bi-graph-up"></i> Relatórios
+                    </a>
+                </li>
+            </ul>
+
+            <div class="user-info mt-auto text-center">
+                <p class="mb-0"><i class="bi bi-person-circle"></i> Admin Sistema</p>
+                <small>Administrador</small>
+                <div class="mt-2">
+                    <a asp-controller="Account" asp-action="Logout" class="btn logout-btn px-3 py-1">
+                        <i class="bi bi-box-arrow-right"></i> Sair
+                    </a>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="topbar">
+                <h6>@ViewData["Title"]</h6>
+                <i class="bi bi-building"></i>
+            </div>
+
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - TrabalhoElvis2 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <!-- Scripts Globais -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

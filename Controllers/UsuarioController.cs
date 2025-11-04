@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using System.Globalization;
 using System.Text;
 using TrabalhoElvis2.Context;
@@ -15,13 +16,13 @@ namespace TrabalhoElvis2.Controllers
             _context = context;
         }
 
-        // --- GET: CADASTRAR ---
+        // --- CADASTRO (GET) ---
         public IActionResult Cadastrar()
         {
             return View();
         }
 
-        // --- POST: CADASTRAR ---
+        // --- CADASTRO (POST) ---
         [HttpPost]
         public IActionResult Cadastrar(Usuario usuario)
         {
@@ -30,12 +31,10 @@ namespace TrabalhoElvis2.Controllers
                 try
                 {
                     _context.Usuarios.Add(usuario);
-                    int registros = _context.SaveChanges();
+                    _context.SaveChanges();
 
-                    Console.WriteLine($"✅ Usuário cadastrado com sucesso! Registros: {registros}");
                     TempData["MensagemSucesso"] = "Cadastro realizado com sucesso! Faça login para continuar.";
-
-                    return RedirectToAction("Login", "Usuario");
+                    return RedirectToAction("Login");
                 }
                 catch (Exception ex)
                 {
@@ -43,25 +42,17 @@ namespace TrabalhoElvis2.Controllers
                     ModelState.AddModelError("", "Erro ao salvar no banco de dados.");
                 }
             }
-            else
-            {
-                foreach (var erro in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    Console.WriteLine($"⚠️ Erro: {erro.ErrorMessage}");
-                }
-            }
-
             return View(usuario);
         }
 
-        // --- GET: LOGIN ---
+        // --- LOGIN (GET) ---
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
-        // --- POST: LOGIN ---
+        // --- LOGIN (POST) ---
         [HttpPost]
         public IActionResult Login(string email, string senha, string tipoUsuario)
         {
@@ -81,11 +72,15 @@ namespace TrabalhoElvis2.Controllers
             }
 
             string tipoNormalizado = Normalizar(tipoUsuario);
-            var usuarios = _context.Usuarios.ToList();
+            string emailNormalizado = email.ToLower().Trim();
+            string senhaNormalizada = senha.Trim();
+
+            // ✅ Corrigido: agora o EF entende a consulta
+            var usuarios = _context.Usuarios
+                .Where(u => u.Email.ToLower() == emailNormalizado && u.Senha == senhaNormalizada)
+                .ToList();
 
             var usuario = usuarios.FirstOrDefault(u =>
-                u.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
-                u.Senha == senha &&
                 Normalizar(u.TipoUsuario) == tipoNormalizado
             );
 
@@ -95,40 +90,55 @@ namespace TrabalhoElvis2.Controllers
                 return View();
             }
 
-            TempData["TipoUsuario"] = usuario.TipoUsuario;
-            TempData["Nome"] = usuario.NomeAdministrador ?? usuario.NomeCompleto;
-            TempData["IdUsuario"] = usuario.Id;
+            // ✅ Salva dados na sessão
+            HttpContext.Session.SetString("TipoUsuario", usuario.TipoUsuario);
+            HttpContext.Session.SetString("NomeUsuario", usuario.NomeAdministrador ?? usuario.NomeCompleto ?? "Usuário");
+            HttpContext.Session.SetInt32("IdUsuario", usuario.Id);
 
+            // ✅ Redireciona conforme o tipo
             return RedirectToAction("Interface");
         }
 
         // --- INTERFACE ---
         public IActionResult Interface()
         {
-            var tipo = TempData["TipoUsuario"]?.ToString();
-            var idUsuario = TempData["IdUsuario"]?.ToString();
+            var tipo = HttpContext.Session.GetString("TipoUsuario");
 
-            if (tipo == null || idUsuario == null)
+            if (string.IsNullOrEmpty(tipo))
                 return RedirectToAction("Login");
 
-            int id = int.Parse(idUsuario);
-
-            switch (tipo)
+            return tipo switch
             {
-                case "Administrador":
-                    return View("InterfaceAdministrador");
-                case "Síndico":
-                    return View("InterfaceSindico");
-                case "Morador":
-                    return View("InterfaceMorador");
-                default:
-                    return RedirectToAction("Login");
-            }
+                "Administrador" => RedirectToAction("PainelAdministrador"),
+                "Síndico" => View("InterfaceSindico"),
+                "Morador" => View("InterfaceMorador"),
+                _ => RedirectToAction("Login")
+            };
+        }
+
+        // --- PAINEL ADMIN ---
+        public IActionResult PainelAdministrador()
+        {
+            var tipo = HttpContext.Session.GetString("TipoUsuario");
+            var nome = HttpContext.Session.GetString("NomeUsuario");
+
+            if (tipo != "Administrador")
+                return RedirectToAction("AcessoNegado");
+
+            ViewBag.NomeUsuario = nome;
+            return View();
+        }
+
+        // --- ACESSO NEGADO ---
+        public IActionResult AcessoNegado()
+        {
+            return View();
         }
 
         // --- LOGOUT ---
         public IActionResult Logout()
         {
+            HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
     }

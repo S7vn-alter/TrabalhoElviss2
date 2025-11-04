@@ -1,0 +1,177 @@
+@{
+    var nomeUsuario = Context.Session.GetString("NomeUsuario") ?? "Administrador";
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - VizinhApp</title>
+
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background-color: #f7f9fc;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #ffffff;
+            border-right: 1px solid #e1e5eb;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 15px;
+        }
+
+        .sidebar .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .sidebar .logo i {
+            color: #4682b4;
+            font-size: 28px;
+        }
+
+        .sidebar .logo h4 {
+            font-weight: 700;
+            color: #4682b4;
+            margin: 0;
+        }
+
+        .sidebar nav a {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            text-decoration: none;
+            color: #333;
+            font-size: 15px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: background 0.2s;
+        }
+
+        .sidebar nav a i {
+            margin-right: 10px;
+            font-size: 17px;
+            color: #4682b4;
+        }
+
+        .sidebar nav a:hover,
+        .sidebar nav a.active {
+            background-color: #4682b4;
+            color: #fff;
+        }
+
+        .sidebar nav a.active i {
+            color: #fff;
+        }
+
+        .user-info {
+            background-color: #f2f6fa;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .user-info p {
+            margin: 0;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .user-info small {
+            color: #777;
+        }
+
+        .btn-logout {
+            display: block;
+            margin-top: 10px;
+            width: 100%;
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-logout:hover {
+            background-color: #bb2d3b;
+        }
+
+        .content {
+            margin-left: 260px;
+            padding: 30px 40px;
+        }
+
+        header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        header span {
+            color: #4682b4;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div>
+            <div class="logo">
+                <i class="bi bi-building"></i>
+                <h4>VizinApp</h4>
+            </div>
+
+            <nav>
+                <a href="/Usuario/Interface"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                <a href="/Contrato/Index" class="active"><i class="bi bi-file-earmark-text"></i> Contratos</a>
+                <a href="#"><i class="bi bi-house"></i> Imóveis</a>
+                <a href="#"><i class="bi bi-people"></i> Pessoas</a>
+                <a href="#"><i class="bi bi-currency-dollar"></i> Financeiro</a>
+                <a href="#"><i class="bi bi-wrench"></i> Manutenções</a>
+                <a href="#"><i class="bi bi-bell"></i> Comunicação</a>
+                <a href="#"><i class="bi bi-shield-lock"></i> Acesso</a>
+                <a href="#"><i class="bi bi-bar-chart"></i> Relatórios</a>
+            </nav>
+        </div>
+
+        <div class="user-info">
+            <p><i class="bi bi-person-circle"></i> @nomeUsuario</p>
+            <small>Administrador</small>
+            <a class="btn-logout" href="/Usuario/Logout"><i class="bi bi-box-arrow-right"></i> Sair</a>
+        </div>
+    </div>
+
+    <div class="content">
+        <header>
+            <span>@ViewData["Title"]</span>
+        </header>
+
+        <main class="mt-4">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
